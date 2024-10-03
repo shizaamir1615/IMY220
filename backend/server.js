@@ -18,7 +18,7 @@ async function connectToDB() {
         await client.connect();
         db = client.db("opula"); // Use or create a database called "playlistSharing"
         console.log("Connected to MongoDB!");
-        
+
         // Start the server only after successful database connection
         app.listen(1337, () => {
             console.log("Listening on http://localhost:1337");
@@ -33,76 +33,216 @@ connectToDB();
 
 // ROUTES
 
-// Add a new user
-app.post("/addUser", async (req, res) => {
+// User authentication
+// Signup
+app.post("/api/signup", async (req, res) => {
     try {
-        const usersCollection = db.collection("users"); // Use the "users" collection
-        const result = await usersCollection.insertOne(req.body); // Insert the user
+        const usersCollection = db.collection("users");
+        const result = await usersCollection.insertOne(req.body);
         res.status(201).json(result);
     } catch (error) {
-        res.status(500).json({ message: "Failed to add user", error });
+        res.status(500).json({ message: "Failed to sign up", error });
     }
 });
 
-// Add a new playlist
-app.post("/addPlaylist", async (req, res) => {
+// Login
+app.post("/api/login", async (req, res) => {
     try {
-        const playlistsCollection = db.collection("playlists"); // Use the "playlists" collection
-        const result = await playlistsCollection.insertOne(req.body); // Insert the playlist
+        const usersCollection = db.collection("users");
+        const user = await usersCollection.findOne({ email: req.body.email, password: req.body.password });
+        
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(401).json({ message: "Invalid credentials" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Failed to log in", error });
+    }
+});
+
+// Logout (This is often handled on the client-side)
+app.post("/api/logout", (req, res) => {
+    // Logic for logout can be added here, like invalidating tokens if using JWT
+    res.status(200).json({ message: "Logged out successfully" });
+});
+
+// Profile management
+// View your profile
+app.get("/api/profile", async (req, res) => {
+    try {
+        const userId = req.body.userId; // Assuming userId is passed in the request body
+        const usersCollection = db.collection("users");
+        const user = await usersCollection.findOne({ _id: userId });
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch profile", error });
+    }
+});
+
+// Edit your profile
+app.put("/api/profile", async (req, res) => {
+    try {
+        const userId = req.body.userId; // Assuming userId is passed in the request body
+        const updatedUser = req.body;
+        const usersCollection = db.collection("users");
+        await usersCollection.updateOne({ _id: userId }, { $set: updatedUser });
+        res.status(200).json({ message: "Profile updated successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update profile", error });
+    }
+});
+
+// View someone else's profile
+app.get("/api/profile/:id", async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const usersCollection = db.collection("users");
+        const user = await usersCollection.findOne({ _id: userId });
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch profile", error });
+    }
+});
+
+// Delete your profile
+app.delete("/api/profile", async (req, res) => {
+    try {
+        const userId = req.body.userId; // Assuming userId is passed in the request body
+        const usersCollection = db.collection("users");
+        await usersCollection.deleteOne({ _id: userId });
+        res.status(200).json({ message: "Profile deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to delete profile", error });
+    }
+});
+
+// Friend / Unfriend API
+app.post("/api/friend/:id", async (req, res) => {
+    try {
+        const userId = req.body.userId; // User sending the friend request
+        const friendId = req.params.id; // ID of the friend to add
+        const usersCollection = db.collection("users");
+        await usersCollection.updateOne({ _id: userId }, { $addToSet: { friendList: friendId } });
+        res.status(200).json({ message: "Friend added successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to add friend", error });
+    }
+});
+
+// Unfriend
+app.delete("/api/friend/:id", async (req, res) => {
+    try {
+        const userId = req.body.userId; // User sending the unfriend request
+        const friendId = req.params.id; // ID of the friend to remove
+        const usersCollection = db.collection("users");
+        await usersCollection.updateOne({ _id: userId }, { $pull: { friendList: friendId } });
+        res.status(200).json({ message: "Friend removed successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to unfriend", error });
+    }
+});
+
+// Playlist API Requests
+// Add a new playlist
+app.post("/api/addPlaylist", async (req, res) => {
+    try {
+        const playlistsCollection = db.collection("playlists");
+        const result = await playlistsCollection.insertOne(req.body);
         res.status(201).json(result);
     } catch (error) {
         res.status(500).json({ message: "Failed to add playlist", error });
     }
 });
 
-// Add a new song
-app.post("/addSong", async (req, res) => {
+// Add songs to playlist
+app.post("/api/playlist/:id/addSong", async (req, res) => {
     try {
-        const songsCollection = db.collection("songs"); // Use the "songs" collection
-        const result = await songsCollection.insertOne(req.body); // Insert the song
+        const playlistId = req.params.id;
+        const songId = req.body.songId; // Assuming songId is passed in the request body
+        const playlistsCollection = db.collection("playlists");
+        await playlistsCollection.updateOne({ _id: playlistId }, { $addToSet: { songs: { songId, addedAt: new Date() } } });
+        res.status(200).json({ message: "Song added to playlist successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to add song to playlist", error });
+    }
+});
+
+// View playlist
+app.get("/api/playlist/:id", async (req, res) => {
+    try {
+        const playlistId = req.params.id;
+        const playlistsCollection = db.collection("playlists");
+        const playlist = await playlistsCollection.findOne({ _id: playlistId });
+        res.status(200).json(playlist);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch playlist", error });
+    }
+});
+
+// Edit playlist details
+app.put("/api/playlist/:id", async (req, res) => {
+    try {
+        const playlistId = req.params.id;
+        const updatedPlaylist = req.body;
+        const playlistsCollection = db.collection("playlists");
+        await playlistsCollection.updateOne({ _id: playlistId }, { $set: updatedPlaylist });
+        res.status(200).json({ message: "Playlist updated successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update playlist", error });
+    }
+});
+
+// Delete playlist
+app.delete("/api/playlist/:id", async (req, res) => {
+    try {
+        const playlistId = req.params.id;
+        const playlistsCollection = db.collection("playlists");
+        await playlistsCollection.deleteOne({ _id: playlistId });
+        res.status(200).json({ message: "Playlist deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to delete playlist", error });
+    }
+});
+
+// Songs API Requests
+// Add a new song
+app.post("/api/addSong", async (req, res) => {
+    try {
+        const songsCollection = db.collection("songs");
+        const result = await songsCollection.insertOne(req.body);
         res.status(201).json(result);
     } catch (error) {
         res.status(500).json({ message: "Failed to add song", error });
     }
 });
 
-// Get all users
-app.get("/users", async (req, res) => {
+// Delete song
+app.delete("/api/song/:id", async (req, res) => {
     try {
-        const usersCollection = db.collection("users");
-        const users = await usersCollection.find({}).toArray(); // Fetch all users
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: "Failed to fetch users", error });
-    }
-});
-
-// Get all playlists
-app.get("/playlists", async (req, res) => {
-    try {
-        const playlistsCollection = db.collection("playlists");
-        const playlists = await playlistsCollection.find({}).toArray(); // Fetch all playlists
-        res.status(200).json(playlists);
-    } catch (error) {
-        res.status(500).json({ message: "Failed to fetch playlists", error });
-    }
-});
-
-// Get all songs
-app.get("/songs", async (req, res) => {
-    try {
+        const songId = req.params.id;
         const songsCollection = db.collection("songs");
-        const songs = await songsCollection.find({}).toArray(); // Fetch all songs
-        res.status(200).json(songs);
+        await songsCollection.deleteOne({ _id: songId });
+        res.status(200).json({ message: "Song deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Failed to fetch songs", error });
+        res.status(500).json({ message: "Failed to delete song", error });
     }
 });
 
-// Home route (for testing)
-app.get("/", (req, res) => {
-    res.send("API is running...");
-});
+// Search for songs
+app.get("/api/search", async (req, res) => {
+    try {
+        const { query } = req.query; // Assuming the search term is passed as a query parameter
+        const songsCollection = db.collection("songs");
+        const playlistsCollection = db.collection("playlists");
+        const usersCollection = db.collection("users");
 
-// Connect to MongoDB and start the server
-connectToDB();
+        const songs = await songsCollection.find({ title: { $regex: query, $options: "i" } }).toArray();
+        const playlists = await playlistsCollection.find({ name: { $regex: query, $options: "i" } }).toArray();
+        const users = await usersCollection.find({ username: { $regex: query, $options: "i" } }).toArray();
+
+        res.status(200).json({ songs, playlists, users });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to search", error });
+    }
+});
