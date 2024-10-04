@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { useParams } from 'react-router-dom';
 
 class UserProfile extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +19,7 @@ class UserProfile extends Component {
   render() {
     const { profilePicture, name, username } = this.props;
     const { isFriend } = this.state;
-
+    const { id } = useParams();
     return (
       <div style={styles.container}>
         <div style={styles.profile}>

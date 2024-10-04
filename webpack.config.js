@@ -25,7 +25,7 @@ module.exports = {
   entry: './frontend/src/index.js',
   output: {
     path: path.resolve(__dirname, 'frontend/public'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -33,8 +33,8 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: 'babel-loader',
-      }
-    ]
+      },
+    ],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -45,6 +45,7 @@ module.exports = {
     },
     port: 3000,  // The port you want to run on
     hot: true,   // Enable hot module replacement
+    historyApiFallback: true, // Add this line for client-side routing
   },
   mode: 'development', // Ensure it's in development mode
 };
