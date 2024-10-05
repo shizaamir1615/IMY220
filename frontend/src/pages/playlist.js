@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Sidebar from "../components/sidebar";
+import Sidebar from "../components/Sidebar";
 
 const Playlist = () => {
   const { id } = useParams();

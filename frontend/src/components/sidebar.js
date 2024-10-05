@@ -1,32 +1,31 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 class Sidebar extends React.Component {
   static defaultProps = {
     profilePicture: '/assets/images/defaultProfile.png', 
-    username: 'Name' 
+    username: 'Name',
+    userId: '1' // Assuming you have user IDs for profiles
   };
 
   render() {
-    const { profilePicture, username } = this.props;
+    const { profilePicture, username, userId } = this.props;
 
     return (
       <div className="sidebar">
         <img src="/assets/images/logoWhite.png" alt="Opula Logo" className="logo" />
 
         <div className="nav-menu">
-          <a href="#" className="nav-item">
+          <Link to="/home" className="nav-item"> {/* Home Route */}
             <img src="/assets/images/homeIcon.png" alt="Home" className="icon" /> home
-          </a>
-          <a href="#" className="nav-item">
+          </Link>
+          <Link to="/search" className="nav-item"> {/* Search Route */}
             <img src="/assets/images/searchIcon.png" alt="Search" className="icon" /> search
-          </a>
-          <a href="#" className="nav-item">
-            <img src="/assets/images/friendsIcon.png" alt="Friends" className="icon" /> friends
-          </a>
-          <a href="#" className="nav-item">
+          </Link>
+          <Link to={`/profile/${userId}`} className="nav-item"> {/* Profile Route */}
             <img src="/assets/images/profileIcon.png" alt="Profile" className="icon" /> profile
-          </a>
+          </Link>
         </div>
 
         <div className="user-profile">
@@ -131,6 +130,7 @@ class Sidebar extends React.Component {
 Sidebar.propTypes = {
   profilePicture: PropTypes.string,
   username: PropTypes.string,
+  userId: PropTypes.string, // Added userId prop to handle dynamic profile routing
 };
 
 export default Sidebar;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Sidebar from "../components/sidebar"; // Adjust the path as needed
+import Sidebar from "../components/Sidebar"; // Adjust the path as needed
 import ProfileView from '../components/profileView';
 import ProfileEditForm from '../components/profileViewEdit';
 import SongFeed from '../components/songFeed'; // Adjust the path as needed

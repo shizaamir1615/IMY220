@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 1337
 
 # Command to run your app
-CMD ["node", "start"] # Adjust if your entry point is different
+CMD ["node", "start"]

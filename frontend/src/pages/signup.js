@@ -1,6 +1,5 @@
-// export default RegisterPage;
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +9,8 @@ const RegisterPage = () => {
     username: ''
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate(); // Hook to redirect after successful signup
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,12 +57,47 @@ const RegisterPage = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (validateForm()) {
-      console.log('Registration form is valid. Proceeding with registration...');
+      setIsSubmitting(true); // Show loading state when submitting
+      try {
+        const response = await fetch('http://localhost:1337/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Registration successful:', data);
+          
+          // Store token in localStorage
+          localStorage.setItem('token', data.token);
+  
+          // Optionally store user info if needed
+          localStorage.setItem('user', JSON.stringify(data.user));
+  
+          // Redirect to home page after successful signup
+          navigate("/home");
+        } else {
+          const errorData = await response.json();
+          console.error('Error response from server:', errorData);
+          setErrors({ general: errorData.message || 'An error occurred. Please try again later.' });
+        }
+      } catch (error) {
+        console.error('Network or unexpected error:', error);
+        setErrors({ general: error.message || 'An error occurred. Please try again later.' });
+      } finally {
+        setIsSubmitting(false); // Hide loading state after submission
+      }
     }
   };
+  
+  
 
   return (
     <div className="register-page">
@@ -71,6 +107,9 @@ const RegisterPage = () => {
         </div>
         <h1 className="welcome-text">Get started</h1>
         <p className="subtext">Please enter your details</p>
+
+        {errors.general && <span className="error general-error">{errors.general}</span>}
+
         <form className="register-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name*</label>
@@ -124,12 +163,15 @@ const RegisterPage = () => {
             {errors.username && <span className="error">{errors.username}</span>}
           </div>
 
-          <button type="submit" className="register-button">Sign up</button>
+          <button type="submit" className="register-button" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing up...' : 'Sign up'}
+          </button>
         </form>
         <p className="login-link">
           Already have an account? <Link to="/login">Login here</Link>
         </p>
       </div>
+
       <div className="image-container">
         <img src="/assets/images/girl.png" alt="Girl with headphones" className="girl-image" />
       </div>

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import Sidebar from "../components/sidebar";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import Sidebar from "../components/Sidebar";
 import AddSongForm from '../components/addSong';
 import AddPlaylistForm from '../components/createPlaylist';
 import SongFeed from '../components/songFeed';
 import PlaylistFeed from '../components/playlistFeed';
 import CommentList from '../components/commentList';
-import AddComment from '../components/addComment'; // Import AddComment component
+import AddComment from '../components/addComment';
 
 const Home = () => {
   const [showAddItem, setShowAddItem] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
-  const [showAddComment, setShowAddComment] = useState(false); // State to manage AddComment visibility
+  const [showAddComment, setShowAddComment] = useState(false);
   const [comments, setComments] = useState([
     {
       username: 'user1',
@@ -24,6 +25,8 @@ const Home = () => {
     }
   ]);
 
+  const navigate = useNavigate(); // For redirection after logout
+
   const handleNewItemClick = () => {
     setShowAddItem(prevState => !prevState);
   };
@@ -34,13 +37,21 @@ const Home = () => {
   };
 
   const handleAddCommentClick = () => {
-    setShowAddComment(prevState => !prevState); // Toggle AddComment form visibility
+    setShowAddComment(prevState => !prevState);
   };
 
   const handleCommentSubmit = (newComment) => {
-    // Add new comment to the list
     setComments([...comments, { username: 'NewUser', profile: 'https://via.placeholder.com/40', text: newComment }]);
-    setShowAddComment(false); // Hide the AddComment form after submission
+    setShowAddComment(false);
+  };
+
+  const handleLogout = () => {
+   
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // Redirect to login page
+    navigate('/');
   };
 
   return (
@@ -71,6 +82,10 @@ const Home = () => {
               placeholder="Search for a song, playlist or user"
               style={styles.searchBar}
             />
+            {/* Logout button */}
+            <button style={styles.logoutBtn} onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
 
@@ -102,22 +117,19 @@ const Home = () => {
           </div>
         )}
 
-        {/* Add Comment Button */}
         <button style={styles.addCommentBtn} onClick={handleAddCommentClick}>
           {showAddComment ? 'Cancel' : 'Add Comment'}
         </button>
 
-        {/* Show AddComment form when button is clicked */}
         {showAddComment && <AddComment onCommentSubmit={handleCommentSubmit} />}
-
-        {/* Comments Section */}
+        
         <CommentList comments={comments} />
       </div>
     </div>
   );
 };
 
-// Inline styles
+// Styles for the Logout button
 const styles = {
   homePage: {
     display: 'flex',
@@ -173,6 +185,14 @@ const styles = {
     maxWidth: '100%',
     boxSizing: 'border-box',
   },
+  logoutBtn: {
+    backgroundColor: '#ff5555',
+    color: '#fff',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
   songs: {
     marginTop: '20px',
   },
@@ -198,6 +218,3 @@ const styles = {
 };
 
 export default Home;
-
-
-// helllo
