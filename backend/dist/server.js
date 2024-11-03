@@ -8,4 +8,4 @@ app.use(express["static"]("./frontend/public"));
 //PORT TO LISTEN TO
 app.listen(3000, function () {
   console.log("Listening on localhost:3000");
-});
+})
