@@ -6,6 +6,6 @@ var app = express();
 //SERVE A STATIC PAGE IN THE PUBLIC DIRECTORY
 app.use(express["static"]("./frontend/public"));
 //PORT TO LISTEN TO
-app.listen(1337, function () {
-  console.log("Listening on localhost:1337");
+app.listen(3000, function () {
+  console.log("Listening on localhost:3000");
 });

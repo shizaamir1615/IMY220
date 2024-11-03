@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 
-class Sidebar extends React.Component {
+export class Sidebar extends React.Component {
   static defaultProps = {
     profilePicture: '/assets/images/defaultProfile.png', 
     username: 'Name',
@@ -14,7 +14,9 @@ class Sidebar extends React.Component {
 
     return (
       <div className="sidebar">
-        <img src="/assets/images/logoWhite.png" alt="Opula Logo" className="logo" />
+        <Link to="/home"> {/* Link to Home Route */}
+          <img src="/assets/images/logoWhite.png" alt="Opula Logo" className="logo" />
+        </Link>
 
         <div className="nav-menu">
           <Link to="/home" className="nav-item"> {/* Home Route */}

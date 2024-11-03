@@ -46,7 +46,7 @@ const LoginPage = () => {
         const data = await response.json();
 
         if (response.ok) {
-          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
           console.log('Login successful:', data);
           navigate('/home'); // Redirect to Home page
         } else {
@@ -58,6 +58,7 @@ const LoginPage = () => {
       }
     }
   };
+
   return (
     <div className="login-page">
       <div className="login-container">
@@ -92,7 +93,7 @@ const LoginPage = () => {
           <button type="submit" className="login-button">Log in</button>
         </form>
         <p className="register-link">
-        {errors.login && <span className="error">{errors.login}</span>}
+          {errors.login && <span className="error">{errors.login}</span>}
           Don't have an account yet? <Link to="/signup">Register here</Link>
         </p>
       </div>

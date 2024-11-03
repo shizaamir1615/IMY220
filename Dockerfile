@@ -1,21 +1,11 @@
-# Backend Dockerfile
-# Use an official Node.js runtime as a parent image
-FROM node:16
+FROM node:20
 
-# Set the working directory
-WORKDIR /app
+WORKDIR /express
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+COPY . . 
 
-# Install dependencies
 RUN npm install
 
-# Copy the rest of your application code
-COPY . .
+CMD ["npm","start"]
 
-# Expose port 1337
-EXPOSE 1337
-
-# Command to run your app
-CMD ["node", "start"]
+EXPOSE 3000

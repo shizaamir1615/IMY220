@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; // Updated import
-import Sidebar from "./components/Sidebar";
+// import Sidebar from "./components/Sidebar";
 import Splash from "./pages/splash";
 import LoginPage from "./pages/login";
 import RegisterPage from "./pages/signup";

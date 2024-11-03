@@ -10,7 +10,7 @@ const RegisterPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate(); // Hook to redirect after successful signup
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +61,7 @@ const RegisterPage = () => {
     e.preventDefault();
   
     if (validateForm()) {
-      setIsSubmitting(true); // Show loading state when submitting
+      setIsSubmitting(true);
       try {
         const response = await fetch('http://localhost:1337/api/signup', {
           method: 'POST',
@@ -75,29 +75,19 @@ const RegisterPage = () => {
           const data = await response.json();
           console.log('Registration successful:', data);
           
-          // Store token in localStorage
-          localStorage.setItem('token', data.token);
-  
-          // Optionally store user info if needed
           localStorage.setItem('user', JSON.stringify(data.user));
-  
-          // Redirect to home page after successful signup
           navigate("/home");
         } else {
           const errorData = await response.json();
-          console.error('Error response from server:', errorData);
           setErrors({ general: errorData.message || 'An error occurred. Please try again later.' });
         }
       } catch (error) {
-        console.error('Network or unexpected error:', error);
         setErrors({ general: error.message || 'An error occurred. Please try again later.' });
       } finally {
-        setIsSubmitting(false); // Hide loading state after submission
+        setIsSubmitting(false);
       }
     }
   };
-  
-  
 
   return (
     <div className="register-page">
@@ -326,22 +316,11 @@ const RegisterPage = () => {
           width: 100%;
           height: 100%;
           object-fit: contain;
-        }
-
-        @media (min-width: 768px) {
-          .image-container {
-            right: -120px;
-          }
-        }
-
-        @media (min-width: 1200px) {
-          .image-container {
-            right: -100px;
-          }
+          z-index: -1;
         }
 
         .error {
-          color: #ff0000;
+          color: red;
           font-size: 14px;
           margin-top: 5px;
         }

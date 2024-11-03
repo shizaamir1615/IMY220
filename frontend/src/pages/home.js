@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from "../components/Sidebar";
 import AddSongForm from '../components/addSong';
 import AddPlaylistForm from '../components/createPlaylist';
@@ -9,23 +9,77 @@ import CommentList from '../components/commentList';
 import AddComment from '../components/addComment';
 
 const Home = () => {
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [showAddItem, setShowAddItem] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
   const [showAddComment, setShowAddComment] = useState(false);
-  const [comments, setComments] = useState([
-    {
-      username: 'user1',
-      profile: 'https://via.placeholder.com/40',
-      text: 'Mid at best',
-    },
-    {
-      username: 'user2',
-      profile: 'https://via.placeholder.com/40',
-      text: 'This is one of the best things I\'ve heard, I honestly love this!',
-    }
-  ]);
+  const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // For redirection after logout
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      const userData = localStorage.getItem('user');
+      
+      if (!userData) {
+        console.log('No user data found in localStorage');
+        navigate('/');
+        return;
+      }
+
+      try {
+        const parsedUserData = JSON.parse(userData);
+        
+        if (!parsedUserData.id) {
+          console.log('No user ID found in stored data');
+          navigate('/');
+          return;
+        }
+
+        const response = await fetch(`http://localhost:1337/api/user/${parsedUserData.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        console.log('Fetched user data:', data);
+
+        setUsername(data.email);
+        setName(data.name);
+        setIsLoading(false);
+
+      } catch (error) {
+        console.error('Error in fetchUserData:', error);
+        setError(error.message);
+        setIsLoading(false);
+        
+        if (error.message.includes('unauthorized') || error.message.includes('invalid token')) {
+          navigate('/');
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
+  const handleAddSong = (songData) => {
+    // Handle the new song submission here
+    console.log('New song:', songData);
+    setShowAddItem(false);
+  };
 
   const handleNewItemClick = () => {
     setShowAddItem(prevState => !prevState);
@@ -41,179 +95,194 @@ const Home = () => {
   };
 
   const handleCommentSubmit = (newComment) => {
-    setComments([...comments, { username: 'NewUser', profile: 'https://via.placeholder.com/40', text: newComment }]);
+    setComments([...comments, { username, profile: 'https://via.placeholder.com/40', text: newComment }]);
     setShowAddComment(false);
   };
 
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value.toLowerCase());
+    setShowSuggestions(true);
+  };
+
+  const handleSuggestionSelect = (suggestion) => {
+    setSearchTerm(suggestion);
+    setShowSuggestions(false);
+  };
+  
+
   const handleLogout = () => {
-   
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    
-    // Redirect to login page
     navigate('/');
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Error loading user data: {error}</p>
+        <button onClick={() => navigate('/')}>Return to Login</button>
+      </div>
+    );
+  }
+
+  
+  const displayName = name || username || 'User';
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Error loading user data: {error}</p>
+        <button onClick={() => navigate('/')}>Return to Login</button>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.homePage}>
-      <Sidebar username='johndoe'/>
-      <div style={styles.content}>
-        <div style={styles.topBar}>
-          <div style={styles.tabs}>
-            <button
-              style={{ ...styles.tab, ...(activeTab === 'playlists' ? styles.activeTab : {}) }}
-              onClick={() => handleTabClick('playlists')}
-            >
-              Playlists
-            </button>
-            <button
-              style={{ ...styles.tab, ...(activeTab === 'songs' ? styles.activeTab : {}) }}
-              onClick={() => handleTabClick('songs')}
-            >
-              Songs
-            </button>
-          </div>
-          <div style={styles.actions}>
-            <button style={styles.newItemBtn} onClick={handleNewItemClick}>
-              {activeTab === 'songs' ? '+ new song' : '+ new playlist'}
-            </button>
-            <input
-              type="text"
-              placeholder="Search for a song, playlist or user"
-              style={styles.searchBar}
-            />
-            {/* Logout button */}
-            <button style={styles.logoutBtn} onClick={handleLogout}>
-              Logout
-            </button>
+      <div style={styles.sidebarContainer}>
+        <Sidebar username={displayName} />
+      </div>
+      <div style={styles.mainContainer}>
+        <div style={styles.topBarContainer}>
+          <div style={styles.topBar}>
+            <div style={styles.tabs}>
+              <button
+                style={{ ...styles.tab, ...(activeTab === 'playlists' ? styles.activeTab : {}) }}
+                onClick={() => handleTabClick('playlists')}
+              >
+                Playlists
+              </button>
+              <button
+                style={{ ...styles.tab, ...(activeTab === 'songs' ? styles.activeTab : {}) }}
+                onClick={() => handleTabClick('songs')}
+              >
+                Songs
+              </button>
+            </div>
+            <div style={styles.actions}>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  placeholder="Search for a song, playlist or user"
+                  style={styles.searchBar}
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                />
+              </div>
+              <button style={styles.logoutBtn} onClick={handleLogout}>Logout</button>
+            </div>
           </div>
         </div>
-
-        {showAddItem ? (
-          activeTab === 'songs' ? (
-            <AddSongForm />
+        <div style={styles.scrollableContent}>
+          {showAddItem && activeTab === 'songs' && (
+            <div style={styles.formContainer}>
+              <AddSongForm onSubmit={handleAddSong} />
+            </div>
+          )}
+          {activeTab === 'songs' ? (
+            <SongFeed searchTerm={searchTerm} />
           ) : (
-            <AddPlaylistForm />
-          )
-        ) : (
-          <div style={styles.songs}>
-            {activeTab === 'songs' ? (
-              <>
-                <h2 style={styles.songsTitle}>Songs</h2>
-                <div style={styles.songsHeader}>
-                  <span>Track</span>
-                  <span>Album</span>
-                  <span>Date Added</span>
-                  <span>User</span>
-                </div>
-                <SongFeed />
-              </>
-            ) : (
-              <>
-                <h2 style={styles.songsTitle}>Playlists</h2>
-                <PlaylistFeed />
-              </>
-            )}
-          </div>
-        )}
-
-        <button style={styles.addCommentBtn} onClick={handleAddCommentClick}>
-          {showAddComment ? 'Cancel' : 'Add Comment'}
-        </button>
-
-        {showAddComment && <AddComment onCommentSubmit={handleCommentSubmit} />}
-        
-        <CommentList comments={comments} />
+            <PlaylistFeed searchTerm={searchTerm} />
+          )}
+          {/* <CommentList comments={comments} />
+          {showAddComment && <AddComment onSubmit={handleCommentSubmit} />} */}
+        </div>
       </div>
     </div>
   );
 };
 
-// Styles for the Logout button
 const styles = {
   homePage: {
     display: 'flex',
     height: '100vh',
-    width: '100vw',
-    overflow: 'hidden',
+    overflow: 'hidden', // Prevent scrolling on the main container
   },
-  content: {
-    flex: 1,
-    background: 'linear-gradient(to bottom, #333, #666)',
-    padding: '20px',
-    color: '#fff',
-    overflow: 'hidden',
-    boxSizing: 'border-box',
+  sidebarContainer: {
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: '240px', // Adjust based on your sidebar width
+    zIndex: 10,
+  },
+  mainContainer: {
+    marginLeft: '240px', // Should match sidebar width
+    width: 'calc(100% - 240px)',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  topBarContainer: {
+    position: 'sticky',
+    top: 0,
+    backgroundColor: '#fff',
+    zIndex: 5,
+    borderBottom: '1px solid #eee',
   },
   topBar: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '20px',
+    padding: '20px',
+  },
+  scrollableContent: {
+    flex: 1,
+    overflowY: 'auto',
+    padding: '20px',
+    height: 'calc(100vh - 80px)', // Adjust based on your top bar height
   },
   tabs: {
     display: 'flex',
   },
   tab: {
+    margin: '0 10px',
     padding: '10px 20px',
-    border: 'none',
-    backgroundColor: '#444',
-    color: '#fff',
-    marginRight: '10px',
     cursor: 'pointer',
+    border: 'none',
+    background: 'none',
+    borderRadius: '5px',
+    transition: 'background-color 0.3s ease',
   },
   activeTab: {
-    backgroundColor: '#ff77e9',
+    backgroundColor: '#F177DF',
+    color: '#fff',
   },
   actions: {
     display: 'flex',
     alignItems: 'center',
-  },
-  newItemBtn: {
-    backgroundColor: '#fff',
-    color: '#000',
-    borderRadius: '20px',
-    padding: '10px 20px',
-    marginRight: '10px',
-    cursor: 'pointer',
+    gap: '10px',
   },
   searchBar: {
     padding: '10px',
-    borderRadius: '20px',
-    border: 'none',
-    width: '250px',
-    maxWidth: '100%',
-    boxSizing: 'border-box',
+    borderRadius: '5px',
+    border: '1px solid #ccc',
+    minWidth: '250px',
   },
   logoutBtn: {
-    backgroundColor: '#ff5555',
-    color: '#fff',
     padding: '10px 20px',
-    border: 'none',
     borderRadius: '5px',
+    border: '1px solid #ccc',
+    backgroundColor: '#fff',
     cursor: 'pointer',
-  },
-  songs: {
-    marginTop: '20px',
-  },
-  songsTitle: {
-    fontSize: '24px',
-    marginBottom: '10px',
-  },
-  songsHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    borderBottom: '1px solid #fff',
-    paddingBottom: '10px',
-  },
-  addCommentBtn: {
-    marginTop: '20px',
-    padding: '10px 20px',
-    backgroundColor: '#ff77e9',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+    '&:hover': {
+      backgroundColor: '#f5f5f5',
+    },
   },
 };
 
