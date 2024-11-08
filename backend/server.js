@@ -30,7 +30,7 @@ connectToDB();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // specify the directory to save the files
+        cb(null, 'uploads/'); 
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '-' + file.originalname); // specify the file naming convention

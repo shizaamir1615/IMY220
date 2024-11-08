@@ -1,0 +1,222 @@
+[{
+  "_id": {
+    "$oid": "66fef944a4d41e325cf2e4db"
+  },
+  "name": "Shiza Butt",
+  "username": "shiza123",
+  "email": "shiza@example.com",
+  "password": "hashed_password",
+  "profileImage": "https://example.com/profile.jpg",
+  "bio": "Music lover and playlist creator",
+  "pronouns": "she/her",
+  "socialLinks": {
+    "facebook": "https://facebook.com/shiza123",
+    "instagram": "https://instagram.com/shiza123"
+  },
+  "friendList": [],
+  "playlists": [],
+  "savedPlaylists": [],
+  "isAdmin": false,
+  "friendRequests": [],
+  "createdAt": "2024-10-03T00:00:00Z",
+  "updatedAt": "2024-10-03T00:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "66ff0b0cef9ac41b61aefb46"
+  },
+  "name": "Alice Johnson",
+  "username": "alicej123",
+  "email": "alice@example.com",
+  "password": "hashed_password",
+  "profileImage": "https://example.com/alice_profile.jpg",
+  "bio": "Avid traveler and photography enthusiast.",
+  "pronouns": "she/her",
+  "socialLinks": {
+    "facebook": "https://facebook.com/alicej123",
+    "instagram": "https://instagram.com/alicej123"
+  },
+  "friendList": [],
+  "playlists": [],
+  "savedPlaylists": [],
+  "isAdmin": false,
+  "friendRequests": [],
+  "createdAt": "2024-10-03T00:00:00Z",
+  "updatedAt": "2024-10-03T00:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "66ff0dcbef9ac41b61aefb47"
+  },
+  "name": "Ethan Smith",
+  "username": "ethansmith99",
+  "email": "ethan@example.com",
+  "password": "hashed_password",
+  "profileImage": "https://example.com/ethan_profile.jpg",
+  "bio": "Music lover and aspiring guitarist.",
+  "pronouns": "he/him",
+  "socialLinks": {
+    "twitter": "https://twitter.com/ethansmith99",
+    "spotify": "https://spotify.com/ethansmith99"
+  },
+  "friendList": [],
+  "playlists": [],
+  "savedPlaylists": [],
+  "isAdmin": false,
+  "friendRequests": [],
+  "createdAt": "2024-10-03T00:00:00Z",
+  "updatedAt": "2024-10-03T00:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "66ff32e2f8b43bf47721e1a3"
+  },
+  "name": "test",
+  "email": "shiza@example.com",
+  "password": "test123",
+  "username": "test@2"
+},
+{
+  "_id": {
+    "$oid": "66ff36b7f8b43bf47721e1a4"
+  },
+  "name": "test2",
+  "email": "s1hiza@example.com",
+  "password": "test123",
+  "username": "test@2"
+},
+{
+  "_id": {
+    "$oid": "66ff3878f8b43bf47721e1a5"
+  },
+  "name": "bfjnb",
+  "email": "shizassd@example.com",
+  "password": "hellooo",
+  "username": "test@43"
+},
+{
+  "_id": {
+    "$oid": "66ff395ff8b43bf47721e1a6"
+  },
+  "name": "jnjnjj",
+  "email": "shizjnja@example.com",
+  "password": "njnjnj",
+  "username": "njnjnj"
+},
+{
+  "_id": {
+    "$oid": "66ff398ff8b43bf47721e1a7"
+  },
+  "name": "njnjk",
+  "email": "kkkmkm@gmail.com",
+  "password": "kmkmkkmk",
+  "username": "kkmk"
+},
+{
+  "_id": {
+    "$oid": "672731aee727a8bee8fcabda"
+  },
+  "name": "haha",
+  "email": "haha@gmail.com",
+  "password": "haha123456",
+  "username": "haha1"
+},
+{
+  "_id": {
+    "$oid": "67274eeab1c07bbe69907c47"
+  },
+  "name": "test3",
+  "email": "s1hiza@example.com",
+  "password": "test123",
+  "username": "test@2"
+},
+{
+  "_id": {
+    "$oid": "672752390b3046d411589fa0"
+  },
+  "name": "tester5",
+  "email": "t@gmail.com",
+  "password": "hello123456",
+  "username": "t123"
+},
+{
+  "_id": {
+    "$oid": "6727683cb0d471b74a48e117"
+  },
+  "name": "test",
+  "email": "testtt@gmail.com",
+  "password": "hello123",
+  "username": "test@gmail.com"
+},
+{
+  "_id": {
+    "$oid": "67276aa8d6d446edad17040f"
+  },
+  "email": "testing@gmail.com",
+  "password": "$2b$10$AU.A1/A.fdI6CXxD/bDvLuO7ZG7/jNLznp7jNKkFXgQPuiMV0DYZu",
+  "name": "testing"
+},
+{
+  "_id": {
+    "$oid": "67276bccd6d446edad170410"
+  },
+  "email": "ka@gmail.com",
+  "password": "$2b$10$uFVU3ussfmJ1j6cCkWeuaOW2wayv0Tf0mBOj0owoPSYvtwr2m6Efq",
+  "name": "ka"
+},
+{
+  "_id": {
+    "$oid": "67276c69d6d446edad170411"
+  },
+  "email": "sarah@gmail.com",
+  "password": "$2b$10$ddYIM6iliNm2bl4/hx.BVusi4BcjP7ZuLgpvue4gHlOot0EKgmBPu",
+  "name": "sarah"
+},
+{
+  "_id": {
+    "$oid": "67276d69d6d446edad170412"
+  },
+  "email": "um@gmail.com",
+  "password": "$2b$10$s3UnEf7XW3Ek71Hw/LA9OuvLObwUc2DUMfN3vseVKq04AtPF2gaqS",
+  "name": "umm"
+},
+{
+  "_id": {
+    "$oid": "67276db3d6d446edad170413"
+  },
+  "email": "nfjr@gmail.com",
+  "password": "$2b$10$fnI.L/ZKE4Da39hUiZz9iOL2i8qOf8buRnfywFu9UmRSDTPsAY3L.",
+  "name": "jrj"
+},
+{
+  "_id": {
+    "$oid": "67276ff7d6d446edad170414"
+  },
+  "email": "shizaa@gmail.com",
+  "password": "$2b$10$QyUs/aWJK5NGj1Ki6GoOY.5B008CAqjhxOpzUMoG.nYFgyVdxTMNq",
+  "name": "shiza"
+},
+{
+  "_id": {
+    "$oid": "672793fe6589f914c73ef8c0"
+  },
+  "email": "john.doe@example.com",
+  "password": "$2b$10$us69zIJSamh6Q5XKBX67Xe5mJHJ5JWE90DGXwMwl5GkrzHLHi9Ugq",
+  "name": "John Doe"
+},
+{
+  "_id": {
+    "$oid": "6727945b6589f914c73ef8c1"
+  },
+  "email": "mike.wilson@example.com",
+  "password": "$2b$10$uLipiaLy21AxF/aoAPk5zeybJ4wOzsprOITURgq.OoCP2VugOOuaq",
+  "name": "Mike Wilson"
+},
+{
+  "_id": {
+    "$oid": "672794a06589f914c73ef8c2"
+  },
+  "email": "jane.smith@example.com",
+  "password": "$2b$10$t9G5C8ZEqr11AEyHpEzMluKme9Qr.DTLet3sSC7QsO/GR2MNmvs0K",
+  "name": "Jane Smith"
+}]

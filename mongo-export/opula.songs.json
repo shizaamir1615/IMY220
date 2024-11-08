@@ -1,0 +1,27 @@
+[{
+  "_id": "646d7a2b3f4e9e92c403c2eb",
+  "name": "Blinding Lights",
+  "artist": "The Weeknd",
+  "spotifyLink": "https://open.spotify.com/track/0VjIf9K5VhX0yJb2T8U6eG",
+  "addedBy": "646d7a2b3f4e9e92c403c2e4",
+  "addedAt": "2024-09-30T15:45:00Z",
+  "isDeleted": false
+},
+{
+  "_id": "646d7a2b3f4e9e92c403c2ec",
+  "name": "Levitating",
+  "artist": "Dua Lipa",
+  "spotifyLink": "https://open.spotify.com/track/2gDvqJ1eFJ5Q3BICyB2I9V",
+  "addedBy": "646d7a2b3f4e9e92c403c2e9",
+  "addedAt": "2024-10-01T09:20:00Z",
+  "isDeleted": false
+},
+{
+  "_id": "646d7a2b3f4e9e92c403c2ed",
+  "name": "Shape of You",
+  "artist": "Ed Sheeran",
+  "spotifyLink": "https://open.spotify.com/track/7qiZfU6d4FZtN5zC1dT3lR",
+  "addedBy": "646d7a2b3f4e9e92c403c2ea",
+  "addedAt": "2024-10-02T10:05:00Z",
+  "isDeleted": false
+}]

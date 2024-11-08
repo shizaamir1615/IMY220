@@ -1,0 +1,60 @@
+[{
+  "_id": "646d7a2b3f4e9e92c403c2e1",
+  "name": "Chill Vibes",
+  "category": "Lo-fi",
+  "description": "A collection of mellow tracks for relaxing and studying.",
+  "coverImage": "https://example.com/chill_vibes_cover.jpg",
+  "hashtags": [
+    "#chill",
+    "#study",
+    "#lofi"
+  ],
+  "songs": [
+    {
+      "songId": "646d7a2b3f4e9e92c403c2e2",
+      "addedAt": "2024-10-01T12:30:00Z"
+    },
+    {
+      "songId": "646d7a2b3f4e9e92c403c2e3",
+      "addedAt": "2024-10-02T14:15:00Z"
+    }
+  ],
+  "author": "646d7a2b3f4e9e92c403c2e4",
+  "isCollaborative": false,
+  "collaborators": [],
+  "createdAt": "2024-10-01T10:00:00Z",
+  "updatedAt": "2024-10-02T15:00:00Z"
+},
+{
+  "_id": "646d7a2b3f4e9e92c403c2e5",
+  "name": "Workout Beats",
+  "category": "Hip-Hop",
+  "description": "High-energy tracks to keep you motivated during your workouts.",
+  "coverImage": "https://example.com/workout_beats_cover.jpg",
+  "hashtags": [
+    "#workout",
+    "#motivation",
+    "#hiphop"
+  ],
+  "songs": [
+    {
+      "songId": "646d7a2b3f4e9e92c403c2e6",
+      "addedAt": "2024-10-01T08:45:00Z"
+    },
+    {
+      "songId": "646d7a2b3f4e9e92c403c2e7",
+      "addedAt": "2024-10-02T09:30:00Z"
+    },
+    {
+      "songId": "646d7a2b3f4e9e92c403c2e8",
+      "addedAt": "2024-10-03T11:00:00Z"
+    }
+  ],
+  "author": "646d7a2b3f4e9e92c403c2e9",
+  "isCollaborative": true,
+  "collaborators": [
+    "646d7a2b3f4e9e92c403c2ea"
+  ],
+  "createdAt": "2024-10-01T07:00:00Z",
+  "updatedAt": "2024-10-03T12:00:00Z"
+}]
